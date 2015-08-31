@@ -1,0 +1,27 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'antlr'
+apply plugin: 'application'
+
+mainClassName = "org.implementable.idl.Main"
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    testCompile "junit:junit:4.11"
+    antlr "org.antlr:antlr4:4.5.1-1"
+
+    compile 'org.projectlombok:lombok:1.16.6'
+
+    compile 'com.fasterxml.jackson.core:jackson-core:2.6.1'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.6.1'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.6.1'
+
+}
+
+generateGrammarSource {
+    outputDirectory = file("${project.projectDir}/src/main/java/org/implementable/idl/parser")
+    arguments += ["-visitor", "-long-messages"]
+}
