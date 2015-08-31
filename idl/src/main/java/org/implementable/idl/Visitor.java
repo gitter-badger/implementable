@@ -47,6 +47,7 @@ public class Visitor extends IDLBaseVisitor<Node> {
             assert(inheritanceList instanceof NodeList);
             anInterface.setInheritance((List<TypeSpec>) inheritanceList);
         }
+
         return anInterface;
     }
 
@@ -91,6 +92,34 @@ public class Visitor extends IDLBaseVisitor<Node> {
     @Override
     public Node visitArgument_decl(IDLParser.Argument_declContext ctx) {
         return new Function.Argument((TypeSpec) visitType_spec(ctx.type_spec()), ctx.id.getText());
+    }
+
+    // Struct
+
+    @Override
+    public Node visitStruct_decl(IDLParser.Struct_declContext ctx) {
+        Struct struct = new Struct((TypeSpec) visitType_spec(ctx.type_spec()));
+        if (ctx.struct_members() != null) {
+            Node members = visitStruct_members(ctx.struct_members());
+            assert(members instanceof NodeList);
+            struct.setMembers((List<Struct.Member>) members);
+        }
+        return struct;
+    }
+
+    @Override
+    public Node visitStruct_members(IDLParser.Struct_membersContext ctx) {
+        Node children = visitChildren(ctx);
+        assert (children instanceof NodeList);
+        return new NodeList(
+                ((NodeList) children).stream().
+                        filter(node -> node instanceof Struct.Member).
+                        collect(Collectors.toList()));
+    }
+
+    @Override
+    public Node visitStruct_member(IDLParser.Struct_memberContext ctx) {
+        return new Struct.Member((TypeSpec) visitType_spec(ctx.type_spec()), ctx.id.getText());
     }
 
     // Type

@@ -48,8 +48,21 @@ interface_body
 
 interface_element
     : function_decl SEMICOLON
+    | struct_decl SEMICOLON?
     ;
 
+// Struct
+struct_member
+    : type_spec id=LOCAL_ID SEMICOLON
+    ;
+
+struct_members
+    : LEFT_BRACE struct_member* RIGHT_BRACE
+    ;
+
+struct_decl
+    : KEYWORD_STRUCT type_spec struct_members
+    ;
 // Function
 
 function_decl
@@ -73,6 +86,7 @@ namespace_decl
 KEYWORD_NAMESPACE:  'namespace';
 KEYWORD_INTERFACE:  'interface';
 KEYWORD_IMPLEMENTS: 'implements';
+KEYWORD_STRUCT:     'struct';
 
 PERIOD:          '.';
 COMA:            ',';
