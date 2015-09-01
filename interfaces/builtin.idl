@@ -1,5 +1,7 @@
 interface $builtin {
   @Builtin
+  struct Any {}
+  @Builtin
   struct Void {}
   @Builtin
   struct Boolean {}
