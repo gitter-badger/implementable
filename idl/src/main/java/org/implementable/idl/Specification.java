@@ -1,11 +1,13 @@
 package org.implementable.idl;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.security.MessageDigest;
 import java.util.LinkedList;
 import java.util.List;
 
+@NoArgsConstructor
 public class Specification implements Node {
 
     @Getter

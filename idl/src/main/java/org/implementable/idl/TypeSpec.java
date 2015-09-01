@@ -6,12 +6,15 @@ import lombok.*;
 import java.security.MessageDigest;
 import java.util.List;
 
+@NoArgsConstructor
 @RequiredArgsConstructor
 public class TypeSpec implements Node {
 
+    @NoArgsConstructor
     @AllArgsConstructor
     static class Template implements Node {
 
+        @NoArgsConstructor
         @AllArgsConstructor
         static class Component implements Node {
             @Getter
@@ -52,6 +55,5 @@ public class TypeSpec implements Node {
             template.digest(digest);
         }
     }
-
 
 }

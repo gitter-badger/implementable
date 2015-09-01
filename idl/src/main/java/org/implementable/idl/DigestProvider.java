@@ -12,4 +12,7 @@ public interface DigestProvider extends Node {
         return digest.digest();
     }
 
+    default void setDigest(byte[] digest) {
+    }
+
 }

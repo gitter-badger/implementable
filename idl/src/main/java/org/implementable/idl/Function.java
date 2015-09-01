@@ -1,19 +1,17 @@
 package org.implementable.idl;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.SneakyThrows;
+import lombok.*;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.util.LinkedList;
 import java.util.List;
 
-@Builder
+@NoArgsConstructor
 public class Function implements Node {
 
     @AllArgsConstructor
+    @NoArgsConstructor
     static class Argument implements Node {
         @Getter
         private TypeSpec type;
@@ -28,13 +26,13 @@ public class Function implements Node {
         }
     }
 
-    @Getter
+    @Getter @Setter
     private TypeSpec type;
 
-    @Getter
+    @Getter @Setter
     private String identifier;
 
-    @Getter
+    @Getter @Setter
     private List<Argument> arguments;
 
     @Override

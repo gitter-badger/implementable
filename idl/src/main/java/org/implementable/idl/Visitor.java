@@ -71,12 +71,11 @@ public class Visitor extends IDLBaseVisitor<Node> {
     public Node visitFunction_decl(IDLParser.Function_declContext ctx) {
         Node argumentsDecl = visitArguments_decl(ctx.arguments_decl());
         assert(argumentsDecl instanceof NodeList);
-        return
-        Function.builder().
-                type((TypeSpec) visitType_spec(ctx.type_spec())).
-                identifier(ctx.id.getText()).
-                arguments((List<Function.Argument>) argumentsDecl).
-                build();
+        Function function = new Function();
+        function.setType(((TypeSpec) visitType_spec(ctx.type_spec())));
+        function.setIdentifier(ctx.id.getText());
+        function.setArguments((List<Function.Argument>) argumentsDecl);
+        return function;
     }
 
     @Override

@@ -2,12 +2,14 @@ package org.implementable.idl;
 
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.security.MessageDigest;
 import java.util.LinkedList;
 import java.util.List;
 
+@NoArgsConstructor
 public class Interface implements Node, DigestProvider {
 
     @Getter

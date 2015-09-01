@@ -5,9 +5,11 @@ import lombok.*;
 import java.security.MessageDigest;
 import java.util.List;
 
+@NoArgsConstructor
 @RequiredArgsConstructor
 public class Struct implements Node, DigestProvider {
 
+    @NoArgsConstructor
     @AllArgsConstructor
     static class Member implements Node {
         @Getter
