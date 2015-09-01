@@ -1,10 +1,10 @@
 # Implementable
 
-Implementable is an opinionated, multilingual microservices framework. Its design is based on the following ideas:
+Implementable is a multilingual microservices framework. Its design is based on the following ideas:
 
 * Microservices can be implemented in any language.
 * Microservices should have strong, enforced interface contracts.
-  *
+  * Capable type system
   * Clear domain model ownership model
 * Latency and failures are unavoidable.
  * Message pipelining & batching
