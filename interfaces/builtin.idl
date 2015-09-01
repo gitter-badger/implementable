@@ -1,34 +1,59 @@
 interface $builtin {
+  @Doc("An opaque type representing any possible value")
   @Builtin
   struct Any {}
+
+  @Doc("Void type representing nothing")
   @Builtin
   struct Void {}
+
+  @Doc("Boolean type")
   @Builtin
   struct Boolean {}
+
+  @Doc("Signed 8-bit integer type")
   @Builtin
   struct Int8 {}
+  @Doc("Signed 16-bit integer type")
   @Builtin
   struct Int16 {}
+  @Doc("Signed 32-bit integer type")
   @Builtin
   struct Int32 {}
+  @Doc("Signed 64-bit integer type")
   @Builtin
-  struct UInt64 {}
+  struct Int64 {}
+
+  @Doc("Unsigned 8-bit integer type")
   @Builtin
   struct UInt8 {}
+  @Doc("Unsigned 16-bit integer type")
   @Builtin
   struct UInt16 {}
+  @Doc("Unsigned 32-bit integer type")
   @Builtin
   struct UInt32 {}
+  @Doc("Unsigned 64-bit integer type")
   @Builtin
   struct UInt64 {}
+
+  @Doc("32-bit float type")
   @Builtin
   struct Float32 {}
+
+  @Doc("64-bit float type")
   @Builtin
   struct Float64 {}
+
+  @Doc("UTF-8 encoded string")
   @Builtin
   struct String {}
+
+  @Doc("Sequence of bytes")
   @Builtin
   struct Bytes {}
+
+  @Doc("Parametrized list type")
   @Builtin
   struct List<T> {}
 }
