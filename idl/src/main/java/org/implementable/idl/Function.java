@@ -30,6 +30,8 @@ public class Function implements Node, Annotated {
         }
     }
 
+    @Getter @Setter private TypeSpec.Template template;
+
     @Getter @Setter
     private TypeSpec type;
 
@@ -43,6 +45,7 @@ public class Function implements Node, Annotated {
     @SneakyThrows
     public void digest(MessageDigest digest) {
         annotations.stream().forEachOrdered(annotation -> annotation.digest(digest));
+        template.digest(digest);
         type.digest(digest);
         digest.update(identifier.getBytes("UTF-8"));
         arguments.stream().forEachOrdered(argument -> argument.digest(digest));

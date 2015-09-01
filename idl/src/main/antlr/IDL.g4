@@ -67,7 +67,7 @@ struct_decl
 // Function
 
 function_decl
-    : ( annotation )* type_spec id=LOCAL_ID arguments_decl
+    : ( annotation )* template? type_spec id=LOCAL_ID arguments_decl
     ;
 
 arguments_decl

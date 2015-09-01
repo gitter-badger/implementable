@@ -84,6 +84,7 @@ public class Visitor extends IDLBaseVisitor<Node> {
         function.setType(((TypeSpec) visitType_spec(ctx.type_spec())));
         function.setIdentifier(ctx.id.getText());
         function.setArguments((List<Function.Argument>) argumentsDecl);
+        function.setTemplate((TypeSpec.Template) visitTemplate(ctx.template()));
         return annotate(function, ctx);
     }
 
