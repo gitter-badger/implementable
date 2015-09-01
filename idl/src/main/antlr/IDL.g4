@@ -34,7 +34,7 @@ template
 // Interface
 
 interface_decl
-    : KEYWORD_INTERFACE type_spec ( interface_inheritance_list )? LEFT_BRACE interface_body RIGHT_BRACE
+    : ( annotation )* KEYWORD_INTERFACE type_spec ( interface_inheritance_list )? LEFT_BRACE interface_body RIGHT_BRACE
     ;
 
 interface_inheritance
@@ -54,7 +54,7 @@ interface_element
 
 // Struct
 struct_member
-    : type_spec id=LOCAL_ID SEMICOLON
+    : ( annotation )* type_spec id=LOCAL_ID SEMICOLON
     ;
 
 struct_members
@@ -62,12 +62,12 @@ struct_members
     ;
 
 struct_decl
-    : KEYWORD_STRUCT type_spec struct_members
+    : ( annotation )* KEYWORD_STRUCT type_spec struct_members
     ;
 // Function
 
 function_decl
-    : type_spec id=LOCAL_ID arguments_decl
+    : ( annotation )* type_spec id=LOCAL_ID arguments_decl
     ;
 
 arguments_decl
@@ -76,19 +76,68 @@ arguments_decl
     ;
 
 argument_decl
-    : type_spec id=LOCAL_ID
+    : ( annotation )* type_spec id=LOCAL_ID
     ;
 
 // Namespace
 namespace_decl
-    : KEYWORD_NAMESPACE id=(REMOTE_ID|LOCAL_ID) LEFT_BRACE definition* RIGHT_BRACE;
+    : ( annotation )* KEYWORD_NAMESPACE id=(REMOTE_ID|LOCAL_ID) LEFT_BRACE definition* RIGHT_BRACE;
 
+// Annotation
+annotation
+    : ANNOTATION_ID LEFT_BRACKET json RIGHT_BRACKET
+    | ANNOTATION_ID LEFT_BRACKET RIGHT_BRACKET
+    | ANNOTATION_ID
+    ;
+
+// JSON
+// Taken from "The Definitive ANTLR 4 Reference" by Terence Parr
+// Derived from http://json.org
+
+json: json_value;
+
+json_object
+    :   '{' json_pair (',' json_pair)* '}'
+    |   '{' '}' // empty object
+    ;
+
+json_pair:   JSON_STRING ':' json_value ;
+
+json_array
+    :   '[' json_value (',' json_value)* ']'
+    |   '[' ']' // empty array
+    ;
+
+json_value
+    :   JSON_STRING
+    |   JSON_NUMBER
+    |   json_object  // recursion
+    |   json_array   // recursion
+    |   'true'  // keywords
+    |   'false'
+    |   'null'
+    ;
+
+JSON_STRING :  '"' (JSON_ESC | ~["\\])* '"' ;
+fragment JSON_ESC :   '\\' (["\\/bfnrt] | JSON_UNICODE) ;
+fragment JSON_UNICODE : 'u' JSON_HEX JSON_HEX JSON_HEX JSON_HEX ;
+fragment JSON_HEX : [0-9a-fA-F] ;
+JSON_NUMBER
+    :   '-'? JSON_INT '.' [0-9]+ JSON_EXP? // 1.35, 1.35E-9, 0.3, -4.5
+    |   '-'? JSON_INT JSON_EXP             // 1e10 -3e4
+    |   '-'? JSON_INT                 // -3, 45
+    ;
+fragment JSON_INT :   '0' | [1-9] [0-9]* ; // no leading zeros
+fragment JSON_EXP :   [Ee] [+\-]? JSON_INT ; // \- since - means "range" inside [...]
+
+// end of JSON
 
 KEYWORD_NAMESPACE:  'namespace';
 KEYWORD_INTERFACE:  'interface';
 KEYWORD_IMPLEMENTS: 'implements';
 KEYWORD_STRUCT:     'struct';
 
+AT:              '@';
 PERIOD:          '.';
 COMA:            ',';
 SEMICOLON:       ';';
@@ -152,5 +201,6 @@ ID_DIGIT
     ;
 
 // Identifier
+ANNOTATION_ID: AT (LOCAL_ID|REMOTE_ID);
 REMOTE_ID: LOCAL_ID ( PERIOD LOCAL_ID )+;
 LOCAL_ID: LETTER (LETTER|ID_DIGIT)*;

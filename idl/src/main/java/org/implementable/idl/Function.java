@@ -8,19 +8,23 @@ import java.util.LinkedList;
 import java.util.List;
 
 @NoArgsConstructor
-public class Function implements Node {
+public class Function implements Node, Annotated {
 
-    @AllArgsConstructor
+    @Getter @Setter private List<Annotation> annotations;
+
+    @RequiredArgsConstructor
     @NoArgsConstructor
-    static class Argument implements Node {
-        @Getter
+    static class Argument implements Node, Annotated {
+        @Getter @Setter private List<Annotation> annotations;
+        @Getter @NonNull
         private TypeSpec type;
-        @Getter
+        @Getter @NonNull
         private String identifier;
 
         @Override
         @SneakyThrows
         public void digest(MessageDigest digest) {
+            annotations.stream().forEachOrdered(annotation -> annotation.digest(digest));
             type.digest(digest);
             digest.update(identifier.getBytes("UTF-8"));
         }
@@ -38,6 +42,7 @@ public class Function implements Node {
     @Override
     @SneakyThrows
     public void digest(MessageDigest digest) {
+        annotations.stream().forEachOrdered(annotation -> annotation.digest(digest));
         type.digest(digest);
         digest.update(identifier.getBytes("UTF-8"));
         arguments.stream().forEachOrdered(argument -> argument.digest(digest));

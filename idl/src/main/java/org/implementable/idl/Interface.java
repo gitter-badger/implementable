@@ -10,7 +10,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 @NoArgsConstructor
-public class Interface implements Node, DigestProvider {
+public class Interface implements Node, DigestProvider, Annotated {
+
+    @Getter @Setter private List<Annotation> annotations;
 
     @Getter
     private TypeSpec type;
@@ -39,6 +41,7 @@ public class Interface implements Node, DigestProvider {
 
     @Override
     public void digest(MessageDigest digest) {
+        annotations.stream().forEachOrdered(annotation -> annotation.digest(digest));
         type.digest(digest);
         inheritance.stream().forEachOrdered(typeSpec -> typeSpec.digest(digest));
         functions.stream().forEachOrdered(function -> function.digest(digest));

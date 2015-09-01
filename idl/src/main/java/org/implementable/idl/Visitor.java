@@ -7,7 +7,6 @@ import org.implementable.idl.parser.IDLParser;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Visitor extends IDLBaseVisitor<Node> {
 
@@ -37,7 +36,7 @@ public class Visitor extends IDLBaseVisitor<Node> {
         assert(children instanceof NodeList);
         NodeList nodes = new NodeList(((NodeList) children).stream().filter(child -> !(child instanceof NodeList)).
                 collect(Collectors.toList()));
-        return new Namespace(ctx.id.getText(), new Specification(nodes));
+        return annotate(new Namespace(ctx.id.getText(), new Specification(nodes)), ctx);
     }
 
     @Override
@@ -58,7 +57,7 @@ public class Visitor extends IDLBaseVisitor<Node> {
             anInterface.setInheritance((List<TypeSpec>) inheritanceList);
         }
 
-        return anInterface;
+        return annotate(anInterface, ctx);
     }
 
     @Override
@@ -85,7 +84,7 @@ public class Visitor extends IDLBaseVisitor<Node> {
         function.setType(((TypeSpec) visitType_spec(ctx.type_spec())));
         function.setIdentifier(ctx.id.getText());
         function.setArguments((List<Function.Argument>) argumentsDecl);
-        return function;
+        return annotate(function, ctx);
     }
 
     @Override
@@ -100,7 +99,7 @@ public class Visitor extends IDLBaseVisitor<Node> {
 
     @Override
     public Node visitArgument_decl(IDLParser.Argument_declContext ctx) {
-        return new Function.Argument((TypeSpec) visitType_spec(ctx.type_spec()), ctx.id.getText());
+        return annotate(new Function.Argument((TypeSpec) visitType_spec(ctx.type_spec()), ctx.id.getText()), ctx);
     }
 
     // Struct
@@ -113,7 +112,7 @@ public class Visitor extends IDLBaseVisitor<Node> {
             assert(members instanceof NodeList);
             struct.setMembers((List<Struct.Member>) members);
         }
-        return struct;
+        return annotate(struct, ctx);
     }
 
     @Override
@@ -128,7 +127,7 @@ public class Visitor extends IDLBaseVisitor<Node> {
 
     @Override
     public Node visitStruct_member(IDLParser.Struct_memberContext ctx) {
-        return new Struct.Member((TypeSpec) visitType_spec(ctx.type_spec()), ctx.id.getText());
+        return annotate(new Struct.Member((TypeSpec) visitType_spec(ctx.type_spec()), ctx.id.getText()), ctx);
     }
 
     // Type
@@ -157,6 +156,34 @@ public class Visitor extends IDLBaseVisitor<Node> {
             inheritance = (List<TypeSpec>) visitInterface_inheritance_list(ctx.interface_inheritance_list());
         }
         return new TypeSpec.Template.Component((TypeSpec) visitType_spec(ctx.type_spec()), inheritance);
+    }
+
+    // Annotation
+
+    @Override
+    public Node visitAnnotation(IDLParser.AnnotationContext ctx) {
+        String identifier = ctx.ANNOTATION_ID().getText().substring(1);
+        if (ctx.json() != null) {
+            return new Annotation(identifier, ctx.json().getText());
+        }
+        return new Annotation(identifier, "null");
+    }
+
+    private Annotated annotate(Annotated node, RuleNode ruleNode) {
+        Node children = visitChildren(ruleNode);
+        List<Annotation> list = new LinkedList<>();
+
+        if (children instanceof Annotation) {
+            list = new LinkedList<>();
+            list.add((Annotation) children);
+        }
+        if (children instanceof NodeList) {
+            list = ((NodeList) children).stream().filter(child -> child instanceof Annotation).
+                    map((Node child) -> (Annotation) child).collect(Collectors.toList());
+        }
+
+        node.setAnnotations(list);
+        return node;
     }
 
     /**
