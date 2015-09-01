@@ -37,7 +37,7 @@ interface_decl
     ;
 
 interface_inheritance
-    : type_spec ( COMA KEYWORD_IMPLEMENTS type_spec )*
+    : type_spec ( COMA type_spec )*
     ;
 interface_inheritance_list
     :  KEYWORD_IMPLEMENTS interface_inheritance
