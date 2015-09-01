@@ -10,6 +10,7 @@ specification
 
 definition
     : interface_decl SEMICOLON?
+    | namespace_decl SEMICOLON?
     ;
 
 // Type

@@ -7,6 +7,7 @@ import org.implementable.idl.parser.IDLParser;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Visitor extends IDLBaseVisitor<Node> {
 
@@ -28,6 +29,15 @@ public class Visitor extends IDLBaseVisitor<Node> {
         assert(definitions instanceof NodeList);
         Specification specification = new Specification((NodeList) definitions);
         return specification;
+    }
+
+    @Override
+    public Node visitNamespace_decl(IDLParser.Namespace_declContext ctx) {
+        Node children = visitChildren(ctx);
+        assert(children instanceof NodeList);
+        NodeList nodes = new NodeList(((NodeList) children).stream().filter(child -> !(child instanceof NodeList)).
+                collect(Collectors.toList()));
+        return new Namespace(ctx.id.getText(), new Specification(nodes));
     }
 
     @Override
