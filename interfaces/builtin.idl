@@ -1,0 +1,32 @@
+interface $builtin {
+  @Builtin
+  struct Void {}
+  @Builtin
+  struct Boolean {}
+  @Builtin
+  struct Int8 {}
+  @Builtin
+  struct Int16 {}
+  @Builtin
+  struct Int32 {}
+  @Builtin
+  struct UInt64 {}
+  @Builtin
+  struct UInt8 {}
+  @Builtin
+  struct UInt16 {}
+  @Builtin
+  struct UInt32 {}
+  @Builtin
+  struct UInt64 {}
+  @Builtin
+  struct Float32 {}
+  @Builtin
+  struct Float64 {}
+  @Builtin
+  struct String {}
+  @Builtin
+  struct Bytes {}
+  @Builtin
+  struct List<T> {}
+}
