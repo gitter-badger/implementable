@@ -1,20 +1,20 @@
 package org.implementable.idl;
 
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.security.MessageDigest;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Interface implements Node {
+public class Interface implements Node, DigestProvider {
 
     @Getter
     private TypeSpec type;
 
     @Getter @Setter
-    private List<TypeSpec> inheritance;
+    private List<TypeSpec> inheritance = new LinkedList<>();
 
     @Getter
     private List<Function> functions = new LinkedList<>();
@@ -34,4 +34,13 @@ public class Interface implements Node {
         });
 
     }
+
+    @Override
+    public void digest(MessageDigest digest) {
+        type.digest(digest);
+        inheritance.stream().forEachOrdered(typeSpec -> typeSpec.digest(digest));
+        functions.stream().forEachOrdered(function -> function.digest(digest));
+        structs.stream().forEachOrdered(struct -> struct.digest(digest));
+    }
+
 }
