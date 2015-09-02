@@ -1,5 +1,7 @@
 # Implementable
 
+[![Join the chat at https://gitter.im/implementable/implementable](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/implementable/implementable?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Implementable is a multilingual microservices framework. Its design is based on the following ideas:
 
 * Microservices can be implemented in any language.
